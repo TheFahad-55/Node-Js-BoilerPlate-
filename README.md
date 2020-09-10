@@ -15,4 +15,4 @@ Node js boilerplate which can help you immediately setup the project and focus o
 5-REQUESTS ARE LIMITED 1000 REQUESTS ARE ALLOWED IN 10min YIU CAN CHANGE THAT.
 6-ALSO LOOK AT THE API DOCUMENTTAION TO UNDERSTAND BETTER  ABOUT THE API.ABSOLUETLY YOU CAN CUSTOMIZE IT.
   # DOCUMENTATION URL:
-        https://documenter.getpostman.com/view/11201356/TVCmT5c8
+       https://documenter.getpostman.com/view/11201356/TVCmT5c8
