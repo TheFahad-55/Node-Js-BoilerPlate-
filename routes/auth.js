@@ -4,7 +4,11 @@ const router = express.Router();
 
 const bcrypt = require("bcryptjs");
 
+const _ = require("lodash");
+
 const User = require("../models/User").User;
+
+const validateUsers = require("../models/User").validateUser;
 
 const asyncMiddleware = require("../middleware/async").asyncMiddleware;
 
@@ -85,6 +89,45 @@ router.post('/forgot-password', asyncMiddleware(async(req, res) => {
     res.status(200).send("EMAIL SENT");
 
 }));
+
+//update The Logged In (User)Credentials...
+
+router.put('/update', auth, asyncMiddleware(async(req, res) => {
+    const {
+        error
+    } = validateUsers(req.body);
+    if (error) {
+        return res.status(400).send(error.details[0].message);
+    }
+
+    const id = req.user._id;
+    let user = await User.findOne({
+        _id: id
+    });
+    if (!user) {
+        return res.status(404).send("User Not Found");
+    }
+    const salt = await bcrypt.genSalt(10);
+    const hashedPass = await bcrypt.hash(req.body.password, salt);
+
+    user.name = req.body.name;
+    user.email = req.body.email;
+    user.password = hashedPass;
+    user.country = req.body.country;
+
+    const result = await user.save();
+
+    if (!result) {
+        return res.status(500).send("INTERNAL SERVER ERROR");
+
+    }
+    res.status(201).send(_.pick(result, ["name", "email", "country"]));
+
+}));
+
+
+
+
 
 //RESET PASSWORD.........
 router.put('/forgot-password/:token', asyncMiddleware(async(req, res) => {
